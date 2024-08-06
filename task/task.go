@@ -18,24 +18,24 @@ const (
 )
 
 type Task struct {
-	ID uuid.UUID
-	ContainerID string
-	Name string
-	State State
-	Image string
-	CPU float64
-	Memory int64
-	Disk int64
-	ExposedPorts nat.PortSet
-	PortBindings map[string]string
+	ID            uuid.UUID
+	ContainerID   string
+	Name          string
+	State         State
+	Image         string
+	CPU           float64
+	Memory        int64
+	Disk          int64
+	ExposedPorts  nat.PortSet
+	PortBindings  map[string]string
 	RestartPolicy string
-	StartTime time.Time
-	FinishTime time.Time
+	StartTime     time.Time
+	FinishTime    time.Time
 }
 
 type TaskEvent struct {
-	ID uuid.UUID
-	State State // Represent the transition of the state
+	ID        uuid.UUID
+	State     State // Represent the transition of the state
 	Timestamp time.Time
-	Task Task
+	Task      Task
 }
