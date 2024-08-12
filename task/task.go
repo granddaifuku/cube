@@ -32,7 +32,7 @@ type Task struct {
 	Name          string
 	State         State
 	Image         string
-	CPU           float64
+	Cpu           float64
 	Memory        int64
 	Disk          int64
 	ExposedPorts  nat.PortSet
@@ -75,6 +75,26 @@ type DockerResult struct {
 	Action      string
 	ContainerId string
 	Result      string
+}
+
+func NewConfig(t *Task) *Config {
+	return &Config{
+		Name:          t.Name,
+		ExposedPorts:  t.ExposedPorts,
+		Image:         t.Image,
+		Cpu:           t.Cpu,
+		Memory:        t.Memory,
+		Disk:          t.Disk,
+		RestartPolicy: t.RestartPolicy,
+	}
+}
+
+func NewDocker(conf *Config) *Docker {
+	dc, _ := client.NewClientWithOpts(client.FromEnv)
+	return &Docker{
+		Client: dc,
+		Config: *conf,
+	}
 }
 
 func (d *Docker) Run() DockerResult {
