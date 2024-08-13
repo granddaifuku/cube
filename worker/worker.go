@@ -30,8 +30,25 @@ func (w *Worker) RunTask() {
 	fmt.Println("I will start/stop a task")
 }
 
-func (w *Worker) StartTask() {
-	fmt.Println("I will start a task")
+func (w *Worker) StartTask(t task.Task) task.DockerResult {
+	t.StartTime = time.Now().UTC()
+	conf := task.NewConfig(&t)
+	d := task.NewDocker(conf)
+
+	result := d.Run()
+	if result.Error != nil {
+		log.Printf("Error running task %v: %v\n", t.ID, result.Error)
+		t.State = task.Failed
+		w.Db[t.ID] = &t
+
+		return result
+	}
+
+	t.ContainerID = result.ContainerId
+	t.State = task.Running
+	w.Db[t.ID] = &t
+
+	return result
 }
 
 func (w *Worker) StopTask(t task.Task) task.DockerResult {
@@ -49,4 +66,8 @@ func (w *Worker) StopTask(t task.Task) task.DockerResult {
 	log.Printf("Stopped and removed container %v for task %v\n", t.ContainerID, t.ID)
 
 	return result
+}
+
+func (w *Worker) AddTask(t task.Task) {
+	w.Queue.Enqueue(t)
 }
