@@ -27,6 +27,15 @@ func (w *Worker) CollectStats() {
 	fmt.Println("I will collect stats")
 }
 
+func (w *Worker) GetTasks() []*task.Task {
+	tasks := []*task.Task{}
+	for _, t := range w.Db {
+		tasks = append(tasks, t)
+	}
+
+	return tasks
+}
+
 // Identify the task's current state and start/stop it
 func (w *Worker) RunTask() task.DockerResult {
 	t := w.Queue.Dequeue()
