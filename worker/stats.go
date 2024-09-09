@@ -11,6 +11,7 @@ type Stats struct {
 	DiskStats *linux.Disk
 	CpuStats  *linux.CPUStat
 	LoadStats *linux.LoadAvg
+	TaskCount int
 }
 
 func (s *Stats) MemTotalKb() uint64 {
