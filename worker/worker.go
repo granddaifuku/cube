@@ -34,7 +34,7 @@ func (w *Worker) GetTasks() []*task.Task {
 }
 
 // Identify the task's current state and start/stop it
-func (w *Worker) RunTask() task.DockerResult {
+func (w *Worker) runTask() task.DockerResult {
 	t := w.Queue.Dequeue()
 	if t == nil {
 		log.Println("No tasks in the queue")
@@ -66,6 +66,21 @@ func (w *Worker) RunTask() task.DockerResult {
 	}
 
 	return result
+}
+
+func (w *Worker) RunTasks() {
+	for {
+		if w.Queue.Len() != 0 {
+			result := w.runTask()
+			if result.Error != nil {
+				log.Printf("Error running task: %v\n", result.Error)
+			}
+		} else {
+			log.Printf("No tasks to process currently.\n")
+		}
+		log.Println("Sleeping for 10 secs.")
+		time.Sleep(10 * time.Second)
+	}
 }
 
 func (w *Worker) StartTask(t task.Task) task.DockerResult {
