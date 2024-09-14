@@ -120,7 +120,7 @@ func (d *Docker) Inspect(containerID string) DockerInspectResponse {
 
 	resp, err := dc.ContainerInspect(ctx, containerID)
 	if err != nil {
-		log.Printf("Error inspecting container: %s\n", err)
+		log.Printf("Error inspecting container: %v\n", err)
 		return DockerInspectResponse{Error: err}
 	}
 
