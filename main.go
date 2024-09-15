@@ -36,7 +36,7 @@ func main() {
 	fmt.Println("Starting Cube manager")
 
 	workers := []string{fmt.Sprintf("%s:%d", whost, wport)}
-	m := manager.New(workers)
+	m := manager.New(workers, "roundrobin")
 	mapi := manager.Api{Address: mhost, Port: mport, Manager: m}
 
 	go m.ProcessTasks()
